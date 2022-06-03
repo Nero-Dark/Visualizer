@@ -1,0 +1,177 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 524
+  ClientWidth = 975
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MainMenu1
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Image1: TImage
+    Left = 240
+    Top = 8
+    Width = 723
+    Height = 417
+    OnMouseLeave = Image1MouseLeave
+    OnMouseMove = Image1MouseMove
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Top = 8
+    Width = 218
+    Height = 491
+    Caption = 'Calculating Options'
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 16
+      Top = 27
+      Width = 100
+      Height = 13
+      Caption = 'Colored Lines Count:'
+    end
+    object CheckBox1: TCheckBox
+      Left = 16
+      Top = 461
+      Width = 97
+      Height = 17
+      Caption = 'Original Image'
+      TabOrder = 0
+      OnClick = CheckBox1Click
+    end
+    object Edit1: TEdit
+      Left = 118
+      Top = 24
+      Width = 86
+      Height = 21
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      TextHint = 'Number of lines'
+    end
+    object Button5: TButton
+      Left = 3
+      Top = 72
+      Width = 75
+      Height = 25
+      Caption = 'Visualize'
+      TabOrder = 2
+      OnClick = Button5Click
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 505
+    Width = 975
+    Height = 19
+    Panels = <>
+  end
+  object TrackBar1: TTrackBar
+    Left = 232
+    Top = 431
+    Width = 739
+    Height = 26
+    Cursor = crHandPoint
+    TabOrder = 2
+    TickMarks = tmBoth
+    TickStyle = tsNone
+    OnChange = TrackBar1Change
+  end
+  object Button1: TButton
+    Left = 232
+    Top = 463
+    Width = 46
+    Height = 25
+    Caption = '|<--'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Left = 284
+    Top = 463
+    Width = 46
+    Height = 25
+    Caption = '>'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 4
+  end
+  object Button3: TButton
+    Left = 336
+    Top = 463
+    Width = 46
+    Height = 25
+    Caption = '||'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 5
+  end
+  object Button4: TButton
+    Left = 388
+    Top = 463
+    Width = 46
+    Height = 25
+    Caption = '-->|'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 6
+  end
+  object MainMenu1: TMainMenu
+    Left = 928
+    Top = 16
+    object File1: TMenuItem
+      Caption = 'File'
+      object Open1: TMenuItem
+        Caption = 'Open'
+        OnClick = Open1Click
+      end
+      object Save1: TMenuItem
+        Caption = 'Save'
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object Exit1: TMenuItem
+        Caption = 'Exit'
+      end
+    end
+    object Help1: TMenuItem
+      Caption = 'Help'
+      object AboutProgram1: TMenuItem
+        Caption = 'About Program'
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 888
+    Top = 16
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 848
+    Top = 16
+  end
+end

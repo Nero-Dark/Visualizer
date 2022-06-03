@@ -1,0 +1,258 @@
+unit Main_Unit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
+  Vcl.ExtCtrls, Vcl.Menus, Vcl.Buttons,DateUtils;
+
+type
+  TForm1 = class(TForm)
+    Image1: TImage;
+    GroupBox1: TGroupBox;
+    StatusBar1: TStatusBar;
+    TrackBar1: TTrackBar;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Open1: TMenuItem;
+    Save1: TMenuItem;
+    N1: TMenuItem;
+    Exit1: TMenuItem;
+    Help1: TMenuItem;
+    AboutProgram1: TMenuItem;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    OpenDialog1: TOpenDialog;
+    SaveDialog1: TSaveDialog;
+    CheckBox1: TCheckBox;
+    Edit1: TEdit;
+    Button5: TButton;
+    Label1: TLabel;
+    procedure Open1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure TrackBar1Change(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Image1MouseLeave(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    loaded:boolean;
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  BtmImgArr: array of TBitmap;
+  BtmImgArr_Temp: array of TBitmap;
+  FileCount:integer;
+  col: integer;
+
+
+implementation
+
+{$R *.dfm}
+
+function Remap(sbm:TBitMap; pfNbit:TPixelFormat):TBitmap;
+var dbm: TBitMap;
+begin
+  dbm := TBitmap.Create;
+  dbm.Width  := sbm.Width ;
+  dbm.Height := sbm.Height;
+  dbm.PixelFormat := pfNbit;
+  dbm.Canvas.Draw(0, 0, sbm);
+  result:=dbm;
+end;
+
+procedure TForm1.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked then
+    Image1.Picture.Bitmap:= BtmImgArr[TrackBar1.Position]
+  else
+    Image1.Picture.Bitmap:= BtmImgArr_temp[TrackBar1.Position];
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  Image1.Canvas.Rectangle(0,0,Image1.Width,Image1.Height);
+  //Image1.Canvas.TextOut();
+  col:=0;
+end;
+
+procedure TForm1.Image1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  begin
+    if Button = mbLeft then
+      begin
+
+      end;
+    if Button = mbRight then
+      begin
+
+      end;
+  end;
+end;
+
+procedure TForm1.Image1MouseLeave(Sender: TObject);
+begin
+  if loaded then
+    Image1.Picture.Bitmap:=BtmImgArr_Temp[TrackBar1.Position];
+end;
+
+procedure TForm1.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  if loaded then
+    begin
+      if CheckBox1.Checked then
+        begin
+          Image1.Picture.Bitmap:=BtmImgArr[TrackBar1.Position];
+          //Image1.Picture.Bitmap.PixelFormat:=pf32bit;
+          Image1.Canvas.Pen.Color:=clRed;
+          Image1.Canvas.MoveTo(X,0);
+          Image1.Canvas.LineTo(X,Image1.Height);
+          Image1.Canvas.MoveTo(0,Y);
+          Image1.Canvas.LineTo(Image1.Width,Y);
+          image1.Canvas.TextOut(x+10,y-50, 'X: '+ IntToStr(X));
+          image1.Canvas.TextOut(x+10,y-35, 'Y: '+ IntToStr(Y));
+          image1.Canvas.TextOut(x+10,y-20, 'C: '+ IntToStr(BtmImgArr[TrackBar1.Position].Canvas.Pixels[x,y]));
+        end
+      else
+        begin
+          Image1.Picture.Bitmap:=BtmImgArr_Temp[TrackBar1.Position];
+          //Image1.Picture.Bitmap.PixelFormat:=pf32bit;
+          Image1.Canvas.Pen.Color:=clRed;
+          Image1.Canvas.MoveTo(X,0);
+          Image1.Canvas.LineTo(X,Image1.Height);
+          Image1.Canvas.MoveTo(0,Y);
+          Image1.Canvas.LineTo(Image1.Width,Y);
+          image1.Canvas.TextOut(x+10,y-50, 'X: '+ IntToStr(X));
+          image1.Canvas.TextOut(x+10,y-35, 'Y: '+ IntToStr(Y));
+          image1.Canvas.TextOut(x+10,y-20, 'C: '+ IntToStr(BtmImgArr_Temp[TrackBar1.Position].Canvas.Pixels[x,y]));
+        end;
+    end;
+end;
+
+procedure TForm1.Open1Click(Sender: TObject);
+var i,x,y: integer;
+    time1,time2:extended;
+    spb:PByteArray;
+begin
+  OpenDialog1.Options := [ofAllowMultiSelect, ofFileMustExist];
+  OpenDialog1.Filter := 'BitMap (*.bmp)|*.bmp|All files (*.*)|*.*';
+  if not OpenDialog1.Execute then Exit
+  else
+    begin
+      time1:=now();
+      SetLength(BtmImgArr, OpenDialog1.Files.Count);
+      SetLength(BtmImgArr_Temp, OpenDialog1.Files.Count);
+      FileCount:=OpenDialog1.Files.Count;
+      for i := 0 to OpenDialog1.Files.Count - 1 do
+        begin
+          BtmImgArr[i] := TBitmap.Create;
+          BtmImgArr_Temp[i] := TBitmap.Create;
+          BtmImgArr[i].LoadFromFile(OpenDialog1.Files.Strings[i]);
+          BtmImgArr[i]:=Remap(BtmImgArr[i],pf8bit);
+          BtmImgArr_Temp[i].LoadFromFile(OpenDialog1.Files.Strings[i]);
+          BtmImgArr_Temp[i]:=Remap(BtmImgArr_Temp[i],pf24bit);
+        end;
+
+      //////////////////////////////////////////////////////////////////////////////
+      Image1.Height:=BtmImgArr[0].Height;
+      Image1.Width:=BtmImgArr[0].Width;
+      image1.Picture.Bitmap:=BtmImgArr[0];
+      Form1.Width:= Image1.Left+Image1.Width+25;
+      TrackBar1.Top:=Image1.Top+Image1.Height+6;
+      TrackBar1.Width:=Image1.Width+16;
+      TrackBar1.Max:=FileCount-1;
+      Button1.Enabled:=true;
+      Button2.Enabled:=true;
+      Button3.Enabled:=true;
+      Button4.Enabled:=true;
+      TrackBar1.Enabled:=true;
+      //////////////////////////////////////////////////////////////////////////////
+      loaded:=True;
+
+      time2:= now();
+
+      //ShowMessage('Time spend:'+inttostr(MilliSecondsBetween(Time2,time1))+'ms');
+    end;
+end;
+
+procedure TForm1.TrackBar1Change(Sender: TObject);
+begin
+  if CheckBox1.Checked then
+    Image1.Picture.Bitmap:= BtmImgArr[TrackBar1.Position]
+  else
+    Image1.Picture.Bitmap:= BtmImgArr_temp[TrackBar1.Position];
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+var time1,time2:extended;
+    spb: PByteArray; // spb значит Source Pointer Byte, чтобы самому не путаться
+    dpb: PByteArray; // dpb значит Dest Pointer Byte, чтобы самому не путаться
+    x,y,i,t: integer;
+begin
+  time1:=now();
+  for i := 0 to Length(BtmImgArr) - 1 do
+        begin
+          for y := 0 to BtmImgArr[i].Height-1 do
+            begin
+              BtmImgArr_Temp[i].Width:=BtmImgArr[i].Width;
+              BtmImgArr_Temp[i].Height:=BtmImgArr[i].Height;
+              spb:=BtmImgArr[i].ScanLine[y];
+              dpb:= BtmImgArr_Temp[i].ScanLine[y];
+              t:=0;
+              for x:=0 to (BtmImgArr[i].Width-1) do
+                begin
+                  if spb^[x] = 0 then
+                    begin
+                      dpb^[t]:=0;
+                      dpb^[t+1]:=0;
+                      dpb^[t+2]:=0;
+                      t:=t+3;
+                      continue;
+                    end;
+                  if spb^[x] = 255 then
+                    begin
+                      dpb^[t]:=255;
+                      dpb^[t+1]:=255;
+                      dpb^[t+2]:=255;
+                      t:=t+3;
+                      continue;
+                    end;
+                  if (spb^[x]>0) and (spb^[x]<124) then
+                    begin
+                      dpb^[t]:=0;
+                      dpb^[t+1]:=255;
+                      dpb^[t+2]:=255;
+                      t:=t+3;
+                      continue;
+                    end;
+                  if (spb^[x]>124) and (spb^[x]<255) then
+                    begin
+                      dpb^[t]:=0;
+                      dpb^[t+1]:=0;
+                      dpb^[t+2]:=255;
+                      t:=t+3;
+                      continue;
+                    end;
+                  t:=t+3;
+                end;
+            end;
+        end;
+
+  Image1.Picture.Bitmap:=BtmImgArr_Temp[TrackBar1.Position];
+  Image1.Repaint;
+  time2:=now();
+end;
+
+end.
